@@ -5,6 +5,7 @@ if (POLICY CMP0091)
 endif (POLICY CMP0091)
 
 set(ADS_VERSION "4.3.0")
+set(VERSION_SHORT "4.3.0")
 
 # By default, the version information is extracted from the git index. However,
 # we can override this behavior by explicitly setting ADS_VERSION and
