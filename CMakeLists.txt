@@ -4,8 +4,8 @@ if (POLICY CMP0091)
   cmake_policy(SET CMP0091 NEW)
 endif (POLICY CMP0091)
 
-set(ADS_VERSION "4.2.1")
-set(VERSION_SHORT "4.2.1")
+set(ADS_VERSION "4.3.1")
+set(VERSION_SHORT "4.3.1")
 
 # By default, the version information is extracted from the git index. However,
 # we can override this behavior by explicitly setting ADS_VERSION and
