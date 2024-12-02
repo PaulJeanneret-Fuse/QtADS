@@ -254,6 +254,7 @@ public:
 		AutoHideCloseButtonCollapsesDock = 0x40, ///< Close button of an auto hide container collapses the dock instead of hiding it completely
 		AutoHideHasCloseButton = 0x80, //< If the flag is set an auto hide title bar has a close button
 		AutoHideHasMinimizeButton = 0x100, ///< if this flag is set, the auto hide title bar has a minimize button to collapse the dock widget
+        AutoHideOpenOnDragHover = 0x200,  ///< if this flag is set, dragging hover the tab bar will open the dock
 
 		DefaultAutoHideConfig = AutoHideFeatureEnabled
 			                  | DockAreaHasAutoHideButton
@@ -261,6 +262,15 @@ public:
 
 	};
     Q_DECLARE_FLAGS(AutoHideFlags, eAutoHideFlag)
+
+	/**
+	 * Global configuration parameters that you can set via setConfigParam()
+	 */
+	enum eConfigParam
+	{
+    	AutoHideOpenOnDragHoverDelay_ms, ///< Delay in ms before the dock opens on drag hover if AutoHideOpenOnDragHover flag is set
+    	ConfigParamCount // just a delimiter to count number of config params
+	};
 
 
 	/**
@@ -322,6 +332,17 @@ public:
 	 * Returns true if the given overlay config flag is set
 	 */
 	static bool testAutoHideConfigFlag(eAutoHideFlag Flag);
+
+	/**
+	 * Sets the value for the given config parameter
+	 */
+	static void setConfigParam(eConfigParam Param, QVariant Value);
+
+	/**
+	 * Returns the value for the given config parameter or the default value
+	 * if the parameter is not set.
+	 */
+	static QVariant configParam(eConfigParam Param, QVariant Default);
 
 	/**
 	 * Returns the global icon provider.
