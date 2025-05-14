@@ -599,9 +599,9 @@ void CDockWidgetTab::setActiveTab(bool active)
 	if (CDockManager::testConfigFlag(CDockManager::FocusHighlighting) && !d->DockWidget->dockManager()->isRestoringState())
 	{
 		bool UpdateFocusStyle = false;
-		if (active && !hasFocus())
-		{
-			//setFocus(Qt::OtherFocusReason);
+        // Update the focus only, if this the dock area of this tab is the focused dock area
+        if (active && !hasFocus() && (d->focusController()->focusedDockArea() == this->dockAreaWidget()))
+		{            
 			d->focusController()->setDockWidgetTabFocused(this);
 			UpdateFocusStyle = true;
 		}
@@ -699,7 +699,7 @@ QString CDockWidgetTab::text() const
 //============================================================================
 void CDockWidgetTab::mouseDoubleClickEvent(QMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton) 
+	if (event->button() == Qt::LeftButton && CDockManager::testConfigFlag(CDockManager::DoubleClickUndocksWidget))
 	{
 		// If this is the last dock area in a dock container it does not make
 		// sense to move it to a new floating widget and leave this one

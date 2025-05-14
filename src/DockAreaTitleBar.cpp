@@ -115,6 +115,14 @@ struct DockAreaTitleBarPrivate
 	}
 
 	/**
+	 * Convenience function for access to dock manager components factory
+	 */
+	QSharedPointer<ads::CDockComponentsFactory> componentsFactory() const
+	{
+        return dockManager()->componentsFactory();
+    }
+
+	/**
 	 * Returns true if the given config flag is set
 	 * Convenience function to ease config flag testing
 	 */
@@ -385,7 +393,10 @@ void CDockAreaTitleBar::resizeEvent(QResizeEvent *event)
 	if (CDockManager::testConfigFlag(CDockManager::DockAreaDynamicTabsMenuButtonVisibility)
 	 && CDockManager::testConfigFlag(CDockManager::DisableTabTextEliding))
 	{
-		markTabsMenuOutdated();
+		// Use queued connection to ensure that the resizing and relayouting has
+		// finished to ensure that the d->TabBar->areTabsOverflowing() function
+		// returns the correct value
+		QMetaObject::invokeMethod(this, "markTabsMenuOutdated", Qt::QueuedConnection);
 	}
 }
 
@@ -726,6 +737,11 @@ void CDockAreaTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
 	}
 
 	if (!d->DockArea->features().testFlag(CDockWidget::DockWidgetFloatable))
+	{
+		return;
+	}
+
+	if (!CDockManager::testConfigFlag(CDockManager::DoubleClickUndocksWidget))
 	{
 		return;
 	}
