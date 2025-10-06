@@ -42,7 +42,6 @@
 #include <QSettings>
 #include <QFile>
 #include <QApplication>
-#include <qpa/qplatformnativeinterface.h>
 #endif
 
 namespace ads
@@ -69,12 +68,14 @@ xcb_connection_t* x11_connection()
 {
 	if (!qApp)
 		return nullptr;
-	QPlatformNativeInterface *native = qApp->platformNativeInterface();
-	if (!native)
-		return nullptr;
 
-	void *connection = native->nativeResourceForIntegration(QByteArray("connection"));
-	return reinterpret_cast<xcb_connection_t *>(connection);
+    xcb_connection_t *connection = nullptr;
+    if (auto *x11Application = qGuiApp->nativeInterface<QNativeInterface::QX11Application>())
+    {
+        connection = x11Application->connection();
+    }
+
+    return connection;
 }
 
 
